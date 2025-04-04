@@ -1,44 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ProjectService } from '../../services/project.service';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Project } from '../../models/project.model';
 
 @Component({
   selector: 'app-edit-project',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './edit-project.component.html',
 })
 export class EditProjectComponent implements OnInit {
-  projectId!: number;
-  project = {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private projectService = inject(ProjectService);
+
+  project: Project = {
     name: '',
     description: '',
     start_date: '',
-    finish_date: '',
+    finish_date: ''
   };
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  isNew = false;
+  projectId: number | null = null;
 
   ngOnInit() {
-    this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+    const idParam = this.route.snapshot.paramMap.get('projectId');
+    this.isNew = idParam === 'new';
+    this.projectId = !this.isNew && idParam ? Number(idParam) : null;
 
-    this.http.get<any>(`http://localhost:8080/projects/${this.projectId}`).subscribe(data => {
-      this.project = {
-        name: data.name,
-        description: data.description,
-        start_date: data.start_date.slice(0, 10),
-        finish_date: data.finish_date.slice(0, 10),
-      };
-    });
+    if (this.projectId) {
+      this.projectService.getProjectById(this.projectId).subscribe({
+        next: (data) => this.project = data,
+        error: (err) => console.error('Ошибка при загрузке проекта:', err)
+      });
+    }
   }
 
   saveProject() {
-    this.http.put(`http://localhost:8080/projects/${this.projectId}`, this.project)
-      .subscribe(() => {
-        alert('Проект обновлен!');
+    if (this.isNew) {
+      console.log("creating new project");
+      this.projectService.createProject(this.project).subscribe(() => {
+        this.router.navigate(['/projects']);
       });
+    } else if (this.projectId !== null) {
+      this.projectService.updateProject(this.projectId, this.project).subscribe(() => {
+        this.router.navigate(['/projects']);
+      });
+    }
   }
 }
