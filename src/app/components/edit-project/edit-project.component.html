@@ -1,0 +1,29 @@
+<h2>Редактировать проект</h2>
+
+<form (ngSubmit)="saveProject()">
+  <label>
+    Название:
+    <input [(ngModel)]="project.name" name="name" required />
+  </label>
+  <br />
+
+  <label>
+    Описание:
+    <input [(ngModel)]="project.description" name="description" required />
+  </label>
+  <br />
+
+  <label>
+    Дата начала:
+    <input type="date" [(ngModel)]="project.start_date" name="start_date" required />
+  </label>
+  <br />
+
+  <label>
+    Дата окончания:
+    <input type="date" [(ngModel)]="project.finish_date" name="finish_date" required />
+  </label>
+  <br />
+
+  <button type="submit">Сохранить</button>
+</form>

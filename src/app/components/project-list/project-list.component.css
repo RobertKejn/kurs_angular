@@ -1,0 +1,25 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .project-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .project-table th, .project-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .project-table th {
+    background-color: #f4f4f4;
+  }
+  
+  .error {
+    color: red;
+  }
+  
