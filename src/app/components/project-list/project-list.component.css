@@ -1,25 +1,109 @@
-.container {
-    max-width: 800px;
-    margin: auto;
-    text-align: center;
-  }
-  
-  .project-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .project-table th, .project-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  
-  .project-table th {
-    background-color: #f4f4f4;
-  }
-  
-  .error {
-    color: red;
-  }
-  
+/* Общие стили для контейнера */
+h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Стили для сообщений загрузки и ошибок */
+div {
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+}
+
+/* Стиль для сообщений ошибки */
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+/* Стиль для кнопки */
+button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #c8c8c8;
+  cursor: not-allowed;
+}
+
+/* Стиль для таблицы */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+thead {
+  background-color: #f4f4f4;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  font-weight: bold;
+  background-color: #e0e0e0;
+}
+
+td {
+  font-size: 16px;
+}
+
+/* Стили для строк таблицы */
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Стиль для кнопок в таблице */
+td button {
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+td button:first-child {
+  background-color: #007bff; /* Синий цвет для кнопки редактирования */
+}
+
+td button:first-child:hover {
+  background-color: #0056b3;
+}
+
+td button:last-child {
+  background-color: #ff9800; /* Оранжевый цвет для кнопки задач */
+}
+
+td button:last-child:hover {
+  background-color: #e68900;
+}
+
+/* Стиль для кнопки создания проекта */
+button[routerLink='/projects/new'] {
+  background-color: #008CBA; /* Синий для кнопки создания */
+  margin-bottom: 20px;
+}
+
+button[routerLink='/projects/new']:hover {
+  background-color: #007bb5;
+}

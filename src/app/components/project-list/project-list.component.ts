@@ -3,7 +3,9 @@ import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { DatePipe } from '@angular/common';
-import { RouterModule, Router } from '@angular/router'; // <-- Добавили Router
+import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-project-list',
@@ -14,8 +16,7 @@ import { RouterModule, Router } from '@angular/router'; // <-- Добавили 
 })
 export class ProjectListComponent implements OnInit {
   private projectService = inject(ProjectService);
-  private router = inject(Router); // <-- Добавили
-
+  private router = inject(Router);
   projects: Project[] = [];
   loading = true;
   error = '';
@@ -35,8 +36,9 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
-  // ✅ Вот этот метод обязательно должен быть внутри класса
   shouldShowList(): boolean {
-    return this.router.url === '/projects';
+    const url = this.router.url;
+    return url === '/projects'; // Показывать список только на этом маршруте
   }
+  
 }
