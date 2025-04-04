@@ -10,6 +10,7 @@ import { Project } from '../../models/project.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './edit-project.component.html',
+  styleUrls: ['./edit-project.component.css'],
 })
 export class EditProjectComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -25,6 +26,7 @@ export class EditProjectComponent implements OnInit {
 
   isNew = false;
   projectId: number | null = null;
+  errorMessage: string | null = null;
 
   ngOnInit() {
     const idParam = this.route.snapshot.paramMap.get('projectId');
@@ -33,21 +35,53 @@ export class EditProjectComponent implements OnInit {
 
     if (this.projectId) {
       this.projectService.getProjectById(this.projectId).subscribe({
-        next: (data) => this.project = data,
+        next: (data) => {
+          this.project = data;
+
+          // Преобразуем строки с датами в формат YYYY-MM-DD
+          if (this.project.start_date) {
+            this.project.start_date = this.formatDate(this.project.start_date);
+          }
+          if (this.project.finish_date) {
+            this.project.finish_date = this.formatDate(this.project.finish_date);
+          }
+        },
         error: (err) => console.error('Ошибка при загрузке проекта:', err)
       });
     }
   }
 
+  formatDate(date: string): string {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = (d.getMonth() + 1).toString().padStart(2, '0'); // Добавляем ведущий 0, если месяц < 10
+    const day = d.getDate().toString().padStart(2, '0'); // Добавляем ведущий 0, если день < 10
+    return `${year}-${month}-${day}`;
+  }
+
   saveProject() {
     if (this.isNew) {
       console.log("creating new project");
-      this.projectService.createProject(this.project).subscribe(() => {
-        this.router.navigate(['/projects']);
+      this.projectService.createProject(this.project).subscribe({
+        next: () => {
+          this.router.navigate(['/projects']);
+        },
+        error: (err) => {
+          console.error('Ошибка при создании проекта:', err);
+          this.errorMessage = 'Ошибка при создании проекта. Пожалуйста, попробуйте позже.';
+          alert(this.errorMessage); // Показываем алерт с ошибкой
+        }
       });
     } else if (this.projectId !== null) {
-      this.projectService.updateProject(this.projectId, this.project).subscribe(() => {
-        this.router.navigate(['/projects']);
+      this.projectService.updateProject(this.projectId, this.project).subscribe({
+        next: () => {
+          this.router.navigate(['/projects']);
+        },
+        error: (err) => {
+          console.error('Ошибка при обновлении проекта:', err);
+          this.errorMessage = 'Ошибка при обновлении проекта. Пожалуйста, попробуйте позже.';
+          alert(this.errorMessage); // Показываем алерт с ошибкой
+        }
       });
     }
   }

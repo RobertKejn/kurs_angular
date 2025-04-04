@@ -13,7 +13,9 @@
         <th>Описание</th>
         <th>Дата начала</th>
         <th>Дата окончания</th>
+        <th>Количество задач</th>
         <th>Действия</th>
+        <th>Задачи</th>
       </tr>
     </thead>
     <tbody>
@@ -22,8 +24,12 @@
         <td>{{ project.description }}</td>
         <td>{{ project.start_date | date: 'dd.MM.yyyy' }}</td>
         <td>{{ project.finish_date | date: 'dd.MM.yyyy' }}</td>
+        <td>{{ project.tasks?.length }}</td>
         <td>
-          <a [routerLink]="['/projects', project.id]">Редактировать</a>
+          <button [routerLink]="['/projects', project.id]">Редактировать</button>
+        </td>
+        <td>
+          <button [routerLink]="['/tasks', project.id]">Посмотреть задачи</button>
         </td>
       </tr>
     </tbody>
